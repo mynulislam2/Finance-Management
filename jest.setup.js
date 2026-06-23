@@ -20,7 +20,17 @@ jest.mock('./src/lib/supabase', () => ({
       order: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
       single: jest.fn().mockReturnThis(),
-      then: jest.fn(),
     })),
+  },
+}));
+
+jest.mock('./src/services/urls', () => ({
+  API_URLS: {
+    BASE_URL: 'https://test.supabase.co',
+    EXPENSES: '/rest/v1/expenses',
+    INCOMES: '/rest/v1/incomes',
+    BUDGETS: '/rest/v1/budgets',
+    RECURRING_PAYMENTS: '/rest/v1/recurring_payments',
+    PROFILES: '/rest/v1/profiles',
   },
 }));

@@ -1,10 +1,19 @@
-import { supabase } from '../../lib/supabase';
+import { httpService } from '../http/HttpService';
+import { API_URLS } from '../urls';
 import { Profile } from '../../types';
 
-export const getProfile = async (userId: string) => {
-  return supabase.from('profiles').select('*').eq('id', userId).single();
-};
+export const profileService = {
+  get: async (userId: string) => {
+    const { data } = await httpService.get<Profile[]>(
+      `${API_URLS.PROFILES}?id=eq.${userId}`,
+    );
+    return data?.[0] ?? null;
+  },
 
-export const updateProfile = async (userId: string, updates: Partial<Profile>) => {
-  return supabase.from('profiles').update(updates).eq('id', userId).select().single();
+  update: async (userId: string, updates: Partial<Profile>) => {
+    const { data } = await httpService.put<Profile>(
+      `${API_URLS.PROFILES}?id=eq.${userId}`, updates,
+    );
+    return data;
+  },
 };

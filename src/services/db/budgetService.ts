@@ -1,22 +1,28 @@
-import { supabase } from '../../lib/supabase';
+import { httpService } from '../http/HttpService';
+import { API_URLS } from '../urls';
 import { Budget } from '../../types';
 
-export const getBudgets = async (userId: string) => {
-  return supabase
-    .from('budgets')
-    .select('*')
-    .eq('user_id', userId)
-    .order('month', { ascending: false });
-};
+export const budgetService = {
+  getAll: async (userId: string) => {
+    const { data } = await httpService.get<Budget[]>(
+      `${API_URLS.BUDGETS}?user_id=eq.${userId}&order=month.desc`,
+    );
+    return data ?? [];
+  },
 
-export const addBudget = async (budget: Omit<Budget, 'id' | 'created_at'>) => {
-  return supabase.from('budgets').insert(budget).select().single();
-};
+  create: async (budget: Omit<Budget, 'id' | 'created_at'>) => {
+    const { data } = await httpService.post<Budget>(API_URLS.BUDGETS, budget);
+    return data;
+  },
 
-export const updateBudget = async (id: string, updates: Partial<Budget>) => {
-  return supabase.from('budgets').update(updates).eq('id', id).select().single();
-};
+  update: async (id: string, updates: Partial<Budget>) => {
+    const { data } = await httpService.put<Budget>(
+      `${API_URLS.BUDGETS}?id=eq.${id}`, updates,
+    );
+    return data;
+  },
 
-export const deleteBudget = async (id: string) => {
-  return supabase.from('budgets').delete().eq('id', id);
+  delete: async (id: string) => {
+    await httpService.delete(`${API_URLS.BUDGETS}?id=eq.${id}`);
+  },
 };

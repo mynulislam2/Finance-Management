@@ -1,15 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { Colors } from '../../constants/colors';
+import { Strings } from '../../constants/strings';
 
 const AnalyticsScreen = () => (
   <View style={styles.container}>
-    <Text style={styles.title}>Analytics</Text>
+    <Text style={styles.title}>{Strings.ANALYTICS}</Text>
   </View>
 );
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8FAFC' },
-  title: { fontSize: 24, fontFamily: 'Inter-Bold', color: '#0F172A' },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background },
+  title: { fontSize: 24, fontFamily: 'Inter-Bold', color: Colors.text },
 });
 
 export default AnalyticsScreen;

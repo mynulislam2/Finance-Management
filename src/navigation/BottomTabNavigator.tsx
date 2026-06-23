@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Colors } from '../constants/colors';
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import AnalyticsScreen from '../screens/analytics/AnalyticsScreen';
 import ReportsScreen from '../screens/reports/ReportsScreen';
@@ -41,8 +42,8 @@ const BottomTabNavigator = () => (
       tabBarIcon: ({ color, size }) => (
         <TabIcon routeName={route.name} color={color} size={size} />
       ),
-      tabBarActiveTintColor: '#4F46E5',
-      tabBarInactiveTintColor: '#94A3B8',
+      tabBarActiveTintColor: Colors.primary,
+      tabBarInactiveTintColor: Colors.muted,
     })}>
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
     <Tab.Screen name="Analytics" component={AnalyticsScreen} />

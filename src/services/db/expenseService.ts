@@ -1,22 +1,35 @@
-import { supabase } from '../../lib/supabase';
+import { httpService } from '../http/HttpService';
+import { API_URLS } from '../urls';
 import { Expense } from '../../types';
 
-export const getExpenses = async (userId: string) => {
-  return supabase
-    .from('expenses')
-    .select('*')
-    .eq('user_id', userId)
-    .order('date', { ascending: false });
-};
+export const expenseService = {
+  getAll: async (userId: string) => {
+    const { data } = await httpService.get<Expense[]>(
+      `${API_URLS.EXPENSES}?user_id=eq.${userId}&order=date.desc`,
+    );
+    return data ?? [];
+  },
 
-export const addExpense = async (expense: Omit<Expense, 'id' | 'created_at'>) => {
-  return supabase.from('expenses').insert(expense).select().single();
-};
+  getById: async (id: string) => {
+    const { data } = await httpService.get<Expense[]>(
+      `${API_URLS.EXPENSES}?id=eq.${id}`,
+    );
+    return data?.[0] ?? null;
+  },
 
-export const updateExpense = async (id: string, updates: Partial<Expense>) => {
-  return supabase.from('expenses').update(updates).eq('id', id).select().single();
-};
+  create: async (expense: Omit<Expense, 'id' | 'created_at'>) => {
+    const { data } = await httpService.post<Expense>(API_URLS.EXPENSES, expense);
+    return data;
+  },
 
-export const deleteExpense = async (id: string) => {
-  return supabase.from('expenses').delete().eq('id', id);
+  update: async (id: string, updates: Partial<Expense>) => {
+    const { data } = await httpService.put<Expense>(
+      `${API_URLS.EXPENSES}?id=eq.${id}`, updates,
+    );
+    return data;
+  },
+
+  delete: async (id: string) => {
+    await httpService.delete(`${API_URLS.EXPENSES}?id=eq.${id}`);
+  },
 };
