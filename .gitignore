@@ -1,0 +1,40 @@
+node_modules/
+.expo/
+dist/
+*.tsbuildinfo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+
+# Build
+web-build/
+android/app/build/
+android/.gradle/
+ios/Pods/
+ios/build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+docs/
