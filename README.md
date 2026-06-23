@@ -1,10 +1,12 @@
 # FinTrack — Personal Finance Management App
 
-A cross-platform mobile application built with **React Native (TypeScript)** and **Supabase** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
+[![CI/CD](https://github.com/mynulislam2/Finance_Management/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mynulislam2/Finance_Management/actions/workflows/ci-cd.yml)
+
+A cross-platform mobile application built with **React Native CLI (TypeScript)** and **Supabase** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
 
 ## Tech Stack
 
-- **Frontend**: React Native + TypeScript, React Navigation v6, Redux Toolkit, Victory Native (charts)
+- **Frontend**: React Native CLI + TypeScript, React Navigation v6, Redux Toolkit, Victory Native (charts)
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
 - **Key Libraries**: date-fns, React Native Vector Icons
 
@@ -41,6 +43,14 @@ src/
 
 ## Getting Started
 
+### Prerequisites
+
+- Node.js >= 20
+- Android Studio (for Android) or Xcode (for iOS)
+- Supabase project
+
+### Setup
+
 ```bash
 npm install
 ```
@@ -48,10 +58,23 @@ npm install
 Add your Supabase credentials to `.env.local`:
 
 ```
-EXPO_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
+SUPABASE_URL=https://<project>.supabase.co
+SUPABASE_ANON_KEY=<your-anon-key>
 ```
 
+### Run on Android
+
 ```bash
-npx expo start
+npx react-native run-android
 ```
+
+### Run on iOS
+
+```bash
+cd ios && pod install && cd ..
+npx react-native run-ios
+```
+
+## CI/CD
+
+On every push to `main`, the pipeline runs **typecheck**, **lint**, **tests**, and builds a **release APK** — available as a downloadable artifact from the Actions tab.
