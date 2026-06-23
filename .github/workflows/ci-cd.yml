@@ -59,6 +59,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
       - name: Build Android release APK
         run: cd android && ./gradlew assembleRelease --no-daemon
 
