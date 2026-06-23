@@ -8,6 +8,7 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 
 - **Frontend**: React Native CLI + TypeScript, React Navigation v6, Redux Toolkit, Victory Native (charts)
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
+- **Networking**: Axios (HttpService singleton with interceptors)
 - **Key Libraries**: date-fns, React Native Vector Icons
 
 ## Features
@@ -24,21 +25,39 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 
 ## Architecture
 
-PostgreSQL on Supabase with Row Level Security ensures users can only access their own data. The Supabase client handles auth session persistence and token refresh automatically. Redux Toolkit manages client-side state across all modules.
+The app follows a layered architecture:
+
+```
+Screen → Hook → Service → HttpService → Supabase REST API
+```
+
+- **`constants/`** — `colors.ts` (design tokens), `strings.ts` (all UI text), `index.ts` (categories, frequencies)
+- **`services/urls.ts`** — Centralized API endpoint definitions
+- **`services/http/HttpService.ts`** — Singleton axios wrapper with auth interceptors, error handling, and token injection
+- **`services/auth/`**, **`services/db/`**, **`services/profile/`** — Business logic services that use HttpService internally
+- **Redux Toolkit** manages client-side state across all modules
+- **Supabase RLS** ensures users can only access their own data
 
 ## Project Structure
 
 ```
 src/
-├── components/     # Reusable UI (common, charts, transactions)
-├── screens/        # Auth, Dashboard, Expenses, Income, Recurring,
-│                   # Budget, Analytics, Reports, Profile
-├── navigation/     # Root, Auth, and Bottom Tab navigators
-├── services/       # Supabase queries (auth, db, profile)
-├── hooks/          # useAuth, useExpenses, useBudgets
-├── store/          # Redux slices (auth, expense, budget)
-├── types/          # TypeScript interfaces
-└── lib/            # Supabase client initialization
+├── assets/           # Images, icons, fonts
+├── components/       # Reusable UI (common, charts, transactions)
+├── constants/        # colors.ts, strings.ts, categories
+├── screens/          # Auth, Dashboard, Expenses, Income, Recurring,
+│                     # Budget, Analytics, Reports, Profile
+├── navigation/       # Root, Auth, and Bottom Tab navigators
+├── services/
+│   ├── http/         # HttpService (axios singleton with interceptors)
+│   ├── auth/         # Authentication service
+│   ├── db/           # Expense, Income, Budget, Recurring services
+│   └── profile/      # Profile service
+│   └── urls.ts       # All API endpoint constants
+├── hooks/            # useAuth, useExpenses, useBudgets
+├── store/            # Redux slices (auth, expense, budget)
+├── types/            # TypeScript interfaces
+└── lib/              # Supabase client initialization
 ```
 
 ## Getting Started
