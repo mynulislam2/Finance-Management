@@ -24,6 +24,11 @@ jest.mock('./src/lib/supabase', () => ({
   },
 }));
 
+jest.mock('react-native-splash-view', () => ({
+  hideSplash: jest.fn(),
+  showSplash: jest.fn(),
+}));
+
 jest.mock('./src/services/urls', () => ({
   API_URLS: {
     BASE_URL: 'https://test.supabase.co',

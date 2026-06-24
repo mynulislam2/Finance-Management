@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { hideSplash } from 'react-native-splash-view';
 import { store } from './src/store';
+import UIProvider from './src/context/UIProvider';
 import RootNavigator from './src/navigation/RootNavigator';
 
 function App() {
@@ -18,7 +19,9 @@ function App() {
     <Provider store={store}>
       <SafeAreaProvider>
         <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
-        <RootNavigator />
+        <UIProvider>
+          <RootNavigator />
+        </UIProvider>
       </SafeAreaProvider>
     </Provider>
   );
