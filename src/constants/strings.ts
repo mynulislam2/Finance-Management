@@ -1,6 +1,6 @@
 export const Strings = {
   // App
-  APP_NAME: 'Personal Finance',
+  APP_NAME: 'FinTrack',
 
   // Auth
   LOGIN_TITLE: 'Welcome Back',
