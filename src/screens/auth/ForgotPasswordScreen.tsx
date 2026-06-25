@@ -1,17 +1,108 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import AuthScreenWrapper from '../../components/common/AuthScreenWrapper';
+import Button from '../../components/common/Button';
+import Input from '../../components/common/Input';
 import { Colors } from '../../constants/colors';
 import { Strings } from '../../constants/strings';
+import { authService } from '../../services/auth/AuthService';
+import { handleError } from '../../utils/errorHandler';
+import { showToast } from '../../utils/toast';
+import { AuthStackParamList } from '../../navigation/AuthNavigator';
 
-const ForgotPasswordScreen = () => (
-  <View style={styles.container}>
-    <Text style={styles.title}>{Strings.FORGOT_PASSWORD_TITLE}</Text>
-  </View>
-);
+type Nav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
+
+const ForgotPasswordScreen = () => {
+  const nav = useNavigation<Nav>();
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const validate = () => {
+    if (!email.trim()) {
+      setError('Email is required');
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Invalid email');
+      return false;
+    }
+    return true;
+  };
+
+  const handleReset = async () => {
+    if (!validate()) return;
+    setLoading(true);
+    try {
+      await authService.resetPassword(email.trim());
+      setSubmitted(true);
+      showToast('Check your email for the reset link', 'success');
+    } catch (err) {
+      handleError(err, 'Unable to send reset link');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <AuthScreenWrapper
+        title="Check Your Email"
+        subtitle="We've sent a password reset link to your email"
+      >
+        <View style={styles.messageContainer}>
+          <Text style={styles.messageText}>
+            Click the link in your email to reset your password. If you don't see it, check your
+            spam folder.
+          </Text>
+        </View>
+        <Button title="Back to Login" onPress={() => nav.navigate('Login')} />
+      </AuthScreenWrapper>
+    );
+  }
+
+  return (
+    <AuthScreenWrapper
+      title={Strings.FORGOT_PASSWORD_TITLE}
+      subtitle={Strings.FORGOT_PASSWORD_SUBTITLE}
+    >
+      <Input
+        label={Strings.EMAIL_LABEL}
+        value={email}
+        onChangeText={t => {
+          setEmail(t);
+          if (error) setError('');
+        }}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        error={error}
+      />
+      <Button title={Strings.FORGOT_PASSWORD_BUTTON} onPress={handleReset} loading={loading} />
+      <Pressable onPress={() => nav.navigate('Login')} style={styles.backLink}>
+        <Text style={styles.backLinkText}>Back to Login</Text>
+      </Pressable>
+    </AuthScreenWrapper>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background },
-  title: { fontSize: 24, fontFamily: 'Inter-Bold', color: Colors.text },
+  messageContainer: {
+    backgroundColor: Colors.primaryLight + '20',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  messageText: {
+    color: Colors.text,
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  backLink: { alignItems: 'center', marginTop: 24 },
+  backLinkText: { color: Colors.primary, fontFamily: 'Inter-Medium', fontSize: 14 },
 });
 
 export default ForgotPasswordScreen;

@@ -1,17 +1,96 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import AuthScreenWrapper from '../../components/common/AuthScreenWrapper';
+import Button from '../../components/common/Button';
+import Input from '../../components/common/Input';
 import { Colors } from '../../constants/colors';
 import { Strings } from '../../constants/strings';
+import { authService } from '../../services/auth/AuthService';
+import { handleError } from '../../utils/errorHandler';
+import { AuthStackParamList } from '../../navigation/AuthNavigator';
 
-const LoginScreen = () => (
-  <View style={styles.container}>
-    <Text style={styles.title}>{Strings.LOGIN_TITLE}</Text>
-  </View>
-);
+type Nav = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
+
+const LoginScreen = () => {
+  const nav = useNavigation<Nav>();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!email.trim()) e.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'Invalid email';
+    if (!password) e.password = 'Password is required';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const clearError = (field: string) =>
+    setErrors(p => {
+      const next = { ...p };
+      delete next[field];
+      return next;
+    });
+
+  const handleLogin = async () => {
+    if (!validate()) return;
+    setLoading(true);
+    try {
+      await authService.signIn({ email: email.trim(), password });
+    } catch (err) {
+      handleError(err, 'Invalid email or password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthScreenWrapper title={Strings.LOGIN_TITLE} subtitle={Strings.LOGIN_SUBTITLE}>
+      <Input
+        label={Strings.EMAIL_LABEL}
+        value={email}
+        onChangeText={t => {
+          setEmail(t);
+          clearError('email');
+        }}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        error={errors.email}
+      />
+      <Input
+        label={Strings.PASSWORD_LABEL}
+        value={password}
+        onChangeText={t => {
+          setPassword(t);
+          clearError('password');
+        }}
+        secureTextEntry
+        error={errors.password}
+      />
+      <Pressable onPress={() => nav.navigate('ForgotPassword')} style={styles.forgotRow}>
+        <Text style={styles.forgotText}>{Strings.FORGOT_PASSWORD}</Text>
+      </Pressable>
+      <Button title={Strings.LOGIN_BUTTON} onPress={handleLogin} loading={loading} />
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>{Strings.NO_ACCOUNT}</Text>
+        <Pressable onPress={() => nav.navigate('Register')}>
+          <Text style={styles.link}>{Strings.REGISTER_BUTTON}</Text>
+        </Pressable>
+      </View>
+    </AuthScreenWrapper>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background },
-  title: { fontSize: 24, fontFamily: 'Inter-Bold', color: Colors.text },
+  forgotRow: { alignSelf: 'flex-end', marginBottom: 24 },
+  forgotText: { color: Colors.primary, fontFamily: 'Inter-Medium', fontSize: 14 },
+  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 24, gap: 4 },
+  footerText: { color: Colors.textSecondary, fontFamily: 'Inter-Regular', fontSize: 14 },
+  link: { color: Colors.primary, fontFamily: 'Inter-SemiBold', fontSize: 14 },
 });
 
 export default LoginScreen;
