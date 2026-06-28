@@ -1,7 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/colors';
+import { BorderRadius, Spacing } from '../../constants/spacing';
+import { Fonts } from '../../constants/fonts';
 
 interface InputProps {
   label: string;
@@ -13,6 +15,8 @@ interface InputProps {
   keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad';
   multiline?: boolean;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  prefix?: string;
+  suffix?: React.ReactNode;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -25,40 +29,16 @@ const Input: React.FC<InputProps> = ({
   keyboardType = 'default',
   multiline = false,
   autoCapitalize = 'none',
+  prefix,
+  suffix,
 }) => {
   const [focused, setFocused] = useState(false);
   const [secure, setSecure] = useState(secureTextEntry);
-  const animated = useRef(new Animated.Value(value ? 1 : 0)).current;
-
-  React.useEffect(() => {
-    if (value || focused) {
-      Animated.timing(animated, { toValue: 1, duration: 200, useNativeDriver: false }).start();
-    } else {
-      Animated.timing(animated, { toValue: 0, duration: 200, useNativeDriver: false }).start();
-    }
-  }, [value, focused, animated]);
-
-  const handleFocus = () => {
-    setFocused(true);
-  };
-
-  const handleBlur = () => {
-    setFocused(false);
-  };
-
-  const labelStyle = {
-    top: animated.interpolate({ inputRange: [0, 1], outputRange: [16, 0] }),
-    fontSize: animated.interpolate({ inputRange: [0, 1], outputRange: [16, 12] }),
-    color: animated.interpolate({
-      inputRange: [0, 1],
-      outputRange: [Colors.muted, focused ? Colors.primary : Colors.muted],
-    }),
-  };
-
   const hasError = !!error;
 
   return (
     <View style={styles.wrapper}>
+      <Text style={[styles.label, hasError && { color: Colors.error }]}>{label}</Text>
       <View
         style={[
           styles.container,
@@ -66,29 +46,34 @@ const Input: React.FC<InputProps> = ({
           hasError && styles.errorBorder,
         ]}
       >
-        <Animated.Text style={[styles.label, labelStyle]}>{label}</Animated.Text>
+        {prefix && <Text style={styles.prefix}>{prefix}</Text>}
         <TextInput
-          style={[styles.input, multiline && styles.multiline]}
+          style={[
+            styles.input,
+            multiline && styles.multiline,
+            prefix && { paddingLeft: Spacing.xs },
+          ]}
           value={value}
           onChangeText={onChangeText}
-          placeholder={focused ? placeholder : ''}
-          placeholderTextColor={Colors.muted}
+          placeholder={placeholder}
+          placeholderTextColor={Colors.outline + '60'}
           secureTextEntry={secure}
           keyboardType={keyboardType}
           multiline={multiline}
           autoCapitalize={autoCapitalize}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
         {secureTextEntry && (
           <Pressable onPress={() => setSecure(!secure)} style={styles.eye}>
             <Icon
               name={secure ? 'eye-off-outline' : 'eye-outline'}
-              size={20}
-              color={Colors.muted}
+              size={22}
+              color={Colors.outline}
             />
           </Pressable>
         )}
+        {suffix && <View style={styles.suffix}>{suffix}</View>}
       </View>
       {hasError && <Text style={styles.errorText}>{error}</Text>}
     </View>
@@ -96,42 +81,49 @@ const Input: React.FC<InputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  wrapper: { marginBottom: 16 },
-  container: {
-    backgroundColor: Colors.white,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: Colors.border,
-    paddingHorizontal: 14,
-    paddingTop: 20,
-    paddingBottom: 8,
-  },
-  focused: { borderColor: Colors.primary },
-  errorBorder: { borderColor: Colors.expense },
+  wrapper: { marginBottom: Spacing.md },
   label: {
-    position: 'absolute',
-    left: 14,
-    fontFamily: 'Inter-Medium',
+    fontSize: 13,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.onSurfaceVariant,
+    marginBottom: Spacing.xs,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceContainerLow,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1.5,
+    borderColor: Colors.surfaceContainerHigh,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    minHeight: 48,
+  },
+  focused: { borderColor: Colors.primary, backgroundColor: Colors.surfaceContainerLowest },
+  errorBorder: { borderColor: Colors.error },
+  prefix: {
+    fontSize: 16,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.onSurfaceVariant,
+    marginRight: Spacing.xs,
   },
   input: {
+    flex: 1,
     fontSize: 16,
-    color: Colors.text,
-    fontFamily: 'Inter-Regular',
+    color: Colors.onSurface,
+    fontFamily: Fonts.family.regular,
     paddingVertical: 0,
     minHeight: 24,
   },
   multiline: { minHeight: 80, textAlignVertical: 'top' },
-  eye: {
-    position: 'absolute',
-    right: 12,
-    top: 22,
-  },
+  eye: { padding: Spacing.sm },
+  suffix: { marginLeft: Spacing.sm },
   errorText: {
-    color: Colors.expense,
+    color: Colors.error,
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
-    marginTop: 4,
-    marginLeft: 4,
+    fontFamily: Fonts.family.regular,
+    marginTop: Spacing.xs,
+    marginLeft: Spacing.xs,
   },
 });
 

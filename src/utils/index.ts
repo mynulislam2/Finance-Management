@@ -1,7 +1,14 @@
 import { format, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns';
 
-export const formatCurrency = (amount: number, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
+let defaultCurrency = 'USD';
+
+export const setDefaultCurrency = (currency: string) => {
+  defaultCurrency = currency;
+};
+
+export const formatCurrency = (amount: number, currency?: string) => {
+  const cur = currency || defaultCurrency;
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: cur }).format(amount);
 };
 
 export const getMonthRange = (date: Date) => ({
