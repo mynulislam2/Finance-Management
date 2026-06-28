@@ -57,7 +57,6 @@ const Toast: React.FC = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity, transform: [{ translateY }] }]}>
-      <View style={[styles.accent, { backgroundColor: colorMap[type] }]} />
       <Icon name={ICONS[type]} size={22} color={colorMap[type]} style={styles.icon} />
       <Text style={styles.text} numberOfLines={2}>
         {message}
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.xl,
+    borderRadius: BorderRadius.md,
     zIndex: 9999,
     elevation: 10,
     shadowColor: '#000',
@@ -83,10 +82,6 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
     overflow: 'hidden',
-  },
-  accent: {
-    width: 4,
-    alignSelf: 'stretch',
   },
   icon: {
     marginLeft: Spacing.md,

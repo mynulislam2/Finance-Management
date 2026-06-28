@@ -8,6 +8,8 @@ export interface Expense {
   payment_method?: string;
   notes?: string;
   recurring_id?: string;
+  sms_hash?: string;
+  sms_body?: string;
   created_at: string;
 }
 
@@ -18,6 +20,8 @@ export interface Income {
   amount: number;
   date: string;
   notes?: string;
+  sms_hash?: string;
+  sms_body?: string;
   created_at: string;
 }
 
