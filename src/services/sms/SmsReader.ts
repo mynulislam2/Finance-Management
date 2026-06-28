@@ -19,12 +19,8 @@ export async function requestSmsPermission(): Promise<boolean | 'settings'> {
   try {
     const permission = 'android.permission.READ_SMS';
 
-    // Check current status
     const hasIt = await PermissionsAndroid.check(permission);
     if (hasIt) return true;
-
-    // Check if we can still ask or it was permanently denied
-    const canAsk = await PermissionsAndroid.shouldShowRequestPermissionRationale(permission);
 
     const result = await PermissionsAndroid.request(permission, {
       title: 'Enable SMS Import',
@@ -35,8 +31,8 @@ export async function requestSmsPermission(): Promise<boolean | 'settings'> {
     });
 
     if (result === PermissionsAndroid.RESULTS.GRANTED) return true;
-    if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN || (!canAsk && result === PermissionsAndroid.RESULTS.DENIED)) {
-      return 'settings'; // Permanently denied — need to go to Settings
+    if (result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+      return 'settings';
     }
     return false;
   } catch {
