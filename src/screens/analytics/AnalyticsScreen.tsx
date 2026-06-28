@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/colors';
 import { Fonts } from '../../constants/fonts';
@@ -11,10 +10,6 @@ import { incomeService } from '../../services/db/IncomeService';
 import { useAuth } from '../../hooks/useAuth';
 import { formatCurrency } from '../../utils';
 import { Expense, Income } from '../../types';
-import { InsightsStackParamList } from '../../navigation/InsightsStackNavigator';
-
-type Nav = NativeStackNavigationProp<InsightsStackParamList, 'InsightsHome'>;
-
 type InsightsTab = 'analytics' | 'reports';
 
 const TABS: { key: InsightsTab; label: string }[] = [
@@ -22,16 +17,12 @@ const TABS: { key: InsightsTab; label: string }[] = [
   { key: 'reports', label: 'Reports' },
 ];
 
-const CHART_COLORS = ['#003ec7', '#006e2f', '#bf3003', '#737688', '#D97706', '#7C3AED', '#0891B2', '#65A30D'];
-const screenWidth = Dimensions.get('window').width - 32;
-
 const COLORS_MAP = [
   '#003ec7', '#006e2f', '#D97706', '#bf3003',
   '#7C3AED', '#0891B2', '#DB2777', '#65A30D',
 ];
 
 const AnalyticsScreen = () => {
-  const nav = useNavigation<Nav>();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -311,10 +302,6 @@ const AnalyticsScreen = () => {
       </View>
     </View>
   );
-};
-
-const Strings = {
-  SPENT: 'Spent',
 };
 
 const styles = StyleSheet.create({
