@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import Config from 'react-native-config';
 import { API_URLS } from '../urls';
 import { supabase } from '../../lib/supabase';
 import { Strings } from '../../constants/strings';
@@ -27,12 +28,14 @@ class HttpService {
       timeout: 15000,
       headers: {
         'Content-Type': 'application/json',
-        'apikey': process.env.SUPABASE_ANON_KEY || '',
+        apikey: Config.SUPABASE_ANON_KEY || '',
       },
     });
 
     client.interceptors.request.use(async config => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session?.access_token) {
         config.headers.Authorization = `Bearer ${session.access_token}`;
       }
@@ -41,7 +44,7 @@ class HttpService {
 
     client.interceptors.response.use(
       (response: AxiosResponse) => response,
-      async (error) => {
+      async error => {
         if (error.response?.status === 401) {
           const httpError: HttpError = {
             code: 'Unauthorized',
