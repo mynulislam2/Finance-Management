@@ -1,12 +1,12 @@
 export const Fonts = {
   // Font Families
   family: {
-    regular: 'Inter-Regular',
-    medium: 'Inter-Medium',
-    semiBold: 'Inter-SemiBold',
-    bold: 'Inter-Bold',
-    // Plain "Inter" works with default weight
-    base: 'Inter',
+    regular: 'Poppins-Regular',
+    medium: 'Poppins-Medium',
+    semiBold: 'Poppins-SemiBold',
+    bold: 'Poppins-Bold',
+    // Plain "Poppins" works with default weight
+    base: 'Poppins',
   } as const,
 
   // Font Sizes
