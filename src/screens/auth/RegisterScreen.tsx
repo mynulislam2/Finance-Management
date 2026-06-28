@@ -6,11 +6,13 @@ import AuthScreenWrapper from '../../components/common/AuthScreenWrapper';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { Colors } from '../../constants/colors';
+import { Fonts } from '../../constants/fonts';
 import { Strings } from '../../constants/strings';
 import { authService } from '../../services/auth/AuthService';
 import { handleError } from '../../utils/errorHandler';
 import { showToast } from '../../utils/toast';
 import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { Spacing } from '../../constants/spacing';
 
 type Nav = NativeStackNavigationProp<AuthStackParamList, 'Register'>;
 
@@ -50,13 +52,6 @@ const RegisterScreen = () => {
     }
   };
 
-  const clearError = (field: string) =>
-    setErrors(p => {
-      const next = { ...p };
-      delete next[field];
-      return next;
-    });
-
   return (
     <AuthScreenWrapper title={Strings.REGISTER_TITLE} subtitle={Strings.REGISTER_SUBTITLE}>
       <Input
@@ -64,7 +59,12 @@ const RegisterScreen = () => {
         value={name}
         onChangeText={t => {
           setName(t);
-          clearError('name');
+          if (errors.name)
+            setErrors(p => {
+              const n = { ...p };
+              delete n.name;
+              return n;
+            });
         }}
         autoCapitalize="words"
         error={errors.name}
@@ -74,7 +74,12 @@ const RegisterScreen = () => {
         value={email}
         onChangeText={t => {
           setEmail(t);
-          clearError('email');
+          if (errors.email)
+            setErrors(p => {
+              const n = { ...p };
+              delete n.email;
+              return n;
+            });
         }}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -85,7 +90,12 @@ const RegisterScreen = () => {
         value={password}
         onChangeText={t => {
           setPassword(t);
-          clearError('password');
+          if (errors.password)
+            setErrors(p => {
+              const n = { ...p };
+              delete n.password;
+              return n;
+            });
         }}
         secureTextEntry
         error={errors.password}
@@ -95,7 +105,12 @@ const RegisterScreen = () => {
         value={confirmPassword}
         onChangeText={t => {
           setConfirmPassword(t);
-          clearError('confirmPassword');
+          if (errors.confirmPassword)
+            setErrors(p => {
+              const n = { ...p };
+              delete n.confirmPassword;
+              return n;
+            });
         }}
         secureTextEntry
         error={errors.confirmPassword}
@@ -112,9 +127,14 @@ const RegisterScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 24, gap: 4 },
-  footerText: { color: Colors.textSecondary, fontFamily: 'Inter-Regular', fontSize: 14 },
-  link: { color: Colors.primary, fontFamily: 'Inter-SemiBold', fontSize: 14 },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: Spacing.lg,
+    gap: Spacing.xs,
+  },
+  footerText: { color: Colors.onSurfaceVariant, fontFamily: Fonts.family.regular, fontSize: 14 },
+  link: { color: Colors.primary, fontFamily: Fonts.family.semiBold, fontSize: 14 },
 });
 
 export default RegisterScreen;

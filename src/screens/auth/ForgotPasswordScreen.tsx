@@ -6,11 +6,13 @@ import AuthScreenWrapper from '../../components/common/AuthScreenWrapper';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { Colors } from '../../constants/colors';
+import { Fonts } from '../../constants/fonts';
 import { Strings } from '../../constants/strings';
 import { authService } from '../../services/auth/AuthService';
 import { handleError } from '../../utils/errorHandler';
 import { showToast } from '../../utils/toast';
 import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { BorderRadius, Spacing } from '../../constants/spacing';
 
 type Nav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
 
@@ -90,19 +92,19 @@ const ForgotPasswordScreen = () => {
 
 const styles = StyleSheet.create({
   messageContainer: {
-    backgroundColor: Colors.primaryLight + '20',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
+    backgroundColor: Colors.surfaceContainer,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   messageText: {
-    color: Colors.text,
-    fontFamily: 'Inter-Regular',
+    color: Colors.onSurface,
+    fontFamily: Fonts.family.regular,
     fontSize: 14,
     lineHeight: 20,
   },
-  backLink: { alignItems: 'center', marginTop: 24 },
-  backLinkText: { color: Colors.primary, fontFamily: 'Inter-Medium', fontSize: 14 },
+  backLink: { alignItems: 'center', marginTop: Spacing.lg },
+  backLinkText: { color: Colors.primary, fontFamily: Fonts.family.medium, fontSize: 14 },
 });
 
 export default ForgotPasswordScreen;
