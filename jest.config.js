@@ -4,4 +4,7 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(react-native|@react-native|react-redux|@reduxjs/toolkit|immer|@react-navigation|victory-native|@supabase|date-fns|react-native-vector-icons)/)',
   ],
+  moduleNameMapper: {
+    '@react-native-community/datetimepicker': '<rootDir>/__mocks__/empty.js',
+  },
 };
