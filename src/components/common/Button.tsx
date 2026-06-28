@@ -1,11 +1,13 @@
 import React from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, ViewStyle } from 'react-native';
 import { Colors } from '../../constants/colors';
+import { BorderRadius, Spacing } from '../../constants/spacing';
+import { Fonts } from '../../constants/fonts';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
@@ -13,6 +15,10 @@ interface ButtonProps {
   fullWidth?: boolean;
   style?: ViewStyle;
 }
+
+const HEIGHT = { sm: 40, md: 52, lg: 60 };
+const FONT_SIZE = { sm: 13, md: 15, lg: 17 };
+const RADIUS = { sm: BorderRadius.sm, md: BorderRadius.lg, lg: BorderRadius.xl };
 
 const Button: React.FC<ButtonProps> = ({
   title,
@@ -29,23 +35,22 @@ const Button: React.FC<ButtonProps> = ({
 
   const bgColor = {
     primary: Colors.primary,
-    secondary: Colors.background,
+    secondary: Colors.surfaceContainerHigh,
     outline: 'transparent',
     ghost: 'transparent',
+    danger: Colors.errorContainer,
   }[variant];
 
   const txtColor = {
-    primary: Colors.white,
-    secondary: Colors.text,
+    primary: Colors.onPrimary,
+    secondary: Colors.onSurface,
     outline: Colors.primary,
     ghost: Colors.primary,
+    danger: Colors.onErrorContainer,
   }[variant];
 
   const borderStyle =
-    variant === 'outline' ? { borderWidth: 1.5, borderColor: Colors.primary } : {};
-
-  const height = { sm: 40, md: 48, lg: 56 }[size];
-  const fontSize = { sm: 13, md: 15, lg: 17 }[size];
+    variant === 'outline' ? { borderWidth: 1.5, borderColor: Colors.outline } : {};
 
   return (
     <Pressable
@@ -53,7 +58,12 @@ const Button: React.FC<ButtonProps> = ({
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.base,
-        { height, backgroundColor: bgColor, opacity: pressed && !isDisabled ? 0.85 : 1 },
+        {
+          height: HEIGHT[size],
+          backgroundColor: bgColor as string,
+          borderRadius: RADIUS[size],
+          opacity: pressed && !isDisabled ? 0.85 : 1,
+        },
         borderStyle,
         fullWidth && styles.fullWidth,
         isDisabled && styles.disabled,
@@ -62,9 +72,11 @@ const Button: React.FC<ButtonProps> = ({
     >
       {icon && <>{icon}</>}
       {loading ? (
-        <ActivityIndicator color={txtColor} size="small" />
+        <ActivityIndicator color={txtColor as string} size="small" />
       ) : (
-        <Text style={[styles.text, { color: txtColor, fontSize }]}>{title}</Text>
+        <Text style={[styles.text, { color: txtColor as string, fontSize: FONT_SIZE[size] }]}>
+          {title}
+        </Text>
       )}
     </Pressable>
   );
@@ -75,13 +87,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
-    gap: 8,
-    paddingHorizontal: 20,
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
   },
   fullWidth: { width: '100%' },
   disabled: { opacity: 0.5 },
-  text: { fontFamily: 'Inter-SemiBold' },
+  text: { fontFamily: Fonts.family.semiBold },
 });
 
 export default Button;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/colors';
+import { Fonts } from '../../constants/fonts';
+import { BorderRadius, Spacing } from '../../constants/spacing';
 
 interface AuthScreenWrapperProps {
   title: string;
@@ -19,9 +20,9 @@ const AuthScreenWrapper: React.FC<AuthScreenWrapperProps> = ({ title, subtitle, 
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.logoContainer}>
+      <View style={styles.brandArea}>
         <View style={styles.logo}>
-          <Icon name="wallet-outline" size={36} color={Colors.primary} />
+          <Text style={styles.logoText}>PF</Text>
         </View>
       </View>
       <Text style={styles.title}>{title}</Text>
@@ -36,31 +37,36 @@ const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 48,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xl * 2,
   },
-  logoContainer: { alignItems: 'center', marginBottom: 24 },
+  brandArea: { alignItems: 'center', marginBottom: Spacing.lg },
   logo: {
-    width: 72,
-    height: 72,
-    borderRadius: 20,
-    backgroundColor: Colors.primaryLight + '20',
+    width: 64,
+    height: 64,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: Colors.primaryContainer,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  logoText: {
+    fontSize: 24,
+    fontFamily: Fonts.family.bold,
+    color: Colors.onPrimaryContainer,
+  },
   title: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
-    color: Colors.text,
+    fontFamily: Fonts.family.bold,
+    color: Colors.onSurface,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     fontSize: 15,
-    fontFamily: 'Inter-Regular',
-    color: Colors.muted,
+    fontFamily: Fonts.family.regular,
+    color: Colors.onSurfaceVariant,
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   form: { gap: 0 },
 });
