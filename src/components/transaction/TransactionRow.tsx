@@ -24,10 +24,13 @@ const CATEGORY_ICONS: Record<string, string> = {
   Bills: 'document-text-outline',
   Health: 'medkit-outline',
   Entertainment: 'film-outline',
+  Recurring: 'repeat-outline',
   Salary: 'cash-outline',
+  Bonus: 'gift-outline',
   Freelance: 'laptop-outline',
   Business: 'briefcase-outline',
   Investment: 'trending-up-outline',
+  Gift: 'gift-outline',
   Other: 'ellipsis-horizontal-circle-outline',
 };
 
@@ -38,10 +41,13 @@ const CATEGORY_COLORS: Record<string, string> = {
   Bills: Colors.outline,
   Health: Colors.error,
   Entertainment: Colors.tertiary,
+  Recurring: Colors.primary,
   Salary: Colors.secondary,
+  Bonus: Colors.warning,
   Freelance: Colors.primary,
   Business: Colors.primaryContainer,
   Investment: Colors.primaryFixedDim,
+  Gift: Colors.tertiary,
   Other: Colors.outlineVariant,
 };
 
@@ -87,9 +93,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: Colors.surface,
     padding: Spacing.md,
-    marginBottom: Spacing.xs,
-    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.sm,
+    borderRadius: BorderRadius.md,
   },
   pressed: { opacity: 0.7 },
   iconContainer: {

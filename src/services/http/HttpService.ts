@@ -45,20 +45,28 @@ class HttpService {
     client.interceptors.response.use(
       (response: AxiosResponse) => response,
       async error => {
-        if (error.response?.status === 401) {
-          const httpError: HttpError = {
+        const status = error.response?.status;
+        const body = error.response?.data;
+
+        if (status === 401) {
+          return Promise.reject({
             code: 'Unauthorized',
             message: Strings.SESSION_EXPIRED,
-            errorData: error.response?.data,
-          };
-          return Promise.reject(httpError);
+            errorData: body,
+          } as HttpError);
+        }
+        if (status === 400 || status === 409) {
+          return Promise.reject({
+            code: String(status),
+            message: body?.message || body?.error || `Request failed (${status})`,
+            errorData: body,
+          } as HttpError);
         }
         if (!error.response) {
-          const httpError: HttpError = {
+          return Promise.reject({
             code: 'NetworkError',
             message: Strings.NETWORK_ERROR,
-          };
-          return Promise.reject(httpError);
+          } as HttpError);
         }
         return Promise.reject(error);
       },
@@ -74,12 +82,17 @@ class HttpService {
 
   async post<T>(url: string, data?: unknown): Promise<AxiosResponse<T>> {
     const client = this.getClient();
-    return client.post<T>(url, data);
+    return client.post<T>(url, data, {
+      headers: { 'Prefer': 'return=representation' },
+    });
   }
 
   async put<T>(url: string, data?: unknown): Promise<AxiosResponse<T>> {
     const client = this.getClient();
-    return client.put<T>(url, data);
+    // Use PATCH for Supabase partial updates (PUT causes pgrst_body errors)
+    return client.patch<T>(url, data, {
+      headers: { 'Prefer': 'return=representation' },
+    });
   }
 
   async delete<T>(url: string, data?: unknown): Promise<AxiosResponse<T>> {
