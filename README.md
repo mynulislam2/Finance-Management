@@ -12,6 +12,16 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
 - **Networking**: Axios (HttpService singleton with interceptors)
 - **Key Libraries**: date-fns, React Native Vector Icons
+- 
+## Screenshots
+
+|             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
+| :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :---------------------------------------------------: |
+| ![Dashboard](screenshots/ss/Home.png) | ![Expenses](screenshots/ss/expenses.png) | ![Income](screenshots/ss/incomes.png) | ![Analytics](screenshots/ss/analytics-allocation.png) |
+
+|              📋 Budgets               |                     🧾 Transactions                     |               👤 Profile               |               📈 Reports               |
+| :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
+| ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
 ## Features
 
@@ -62,15 +72,6 @@ src/
 └── lib/              # Supabase client initialization
 ```
 
-## Screenshots
-
-|             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
-| :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :---------------------------------------------------: |
-| ![Dashboard](screenshots/ss/Home.png) | ![Expenses](screenshots/ss/expenses.png) | ![Income](screenshots/ss/incomes.png) | ![Analytics](screenshots/ss/analytics-allocation.png) |
-
-|              📋 Budgets               |                     🧾 Transactions                     |               👤 Profile               |               📈 Reports               |
-| :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
-| ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
 ## Getting Started
 
