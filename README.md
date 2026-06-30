@@ -39,7 +39,6 @@ Screen → Hook → Service → HttpService → Supabase REST API
 - **`services/http/HttpService.ts`** — Singleton axios wrapper with auth interceptors, error handling, and token injection
 - **`services/auth/`**, **`services/db/`**, **`services/profile/`** — Business logic services that use HttpService internally
 - **Redux Toolkit** manages client-side state across all modules
-- **Supabase RLS** ensures users can only access their own data
 
 ## Project Structure
 
