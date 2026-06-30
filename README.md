@@ -4,15 +4,8 @@
 [![GitHub](https://img.shields.io/badge/GitHub-mynulislam2-blue?logo=github)](https://github.com/mynulislam2/Finance-Management)
 [![Download APK](https://img.shields.io/badge/Download-APK-34D058?logo=android)](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml)
 
-A cross-platform mobile application built with **React Native CLI (TypeScript)** and **Supabase** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
+A cross-platform mobile application built with **React Native CLI (TypeScript)** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
 
-## Tech Stack
-
-- **Frontend**: React Native CLI + TypeScript, React Navigation v7, Redux Toolkit, Victory Native (charts)
-- **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
-- **Networking**: Axios (HttpService singleton with interceptors)
-- **Key Libraries**: date-fns, React Native Vector Icons
-- 
 ## Screenshots
 
 |             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
@@ -23,6 +16,14 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 | :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
 | ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
+
+## Tech Stack
+
+- **Frontend**: React Native CLI + TypeScript, React Navigation v7, Redux Toolkit, Victory Native (charts)
+- **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
+- **Networking**: Axios (HttpService singleton with interceptors)
+- **Key Libraries**: date-fns, React Native Vector Icons
+  
 ## Features
 
 - **Auth** — Email/password sign-up, login, password reset with persisted sessions
