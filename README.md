@@ -109,7 +109,6 @@ npx react-native run-android
 cd ios && pod install && cd ..
 npx react-native run-ios
 ```
-
 ## CI/CD
 
 On every push to `main`, the pipeline runs **typecheck**, **lint**, **tests**, and builds a **release APK** — available as a downloadable artifact from the Actions tab.
