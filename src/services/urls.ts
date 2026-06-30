@@ -1,5 +1,7 @@
+import Config from 'react-native-config';
+
 export const API_URLS = {
-  BASE_URL: process.env.SUPABASE_URL || '',
+  BASE_URL: Config.SUPABASE_URL || '',
 
   // Auth
   AUTH_SIGNUP: '/auth/v1/signup',

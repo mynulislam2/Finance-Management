@@ -11,14 +11,14 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       hideSplash();
-    }, 2000);
+    }, 1500);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <Provider store={store}>
       <SafeAreaProvider>
-        <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
+        <StatusBar barStyle="dark-content" backgroundColor="#fbf8ff" />
         <UIProvider>
           <RootNavigator />
         </UIProvider>

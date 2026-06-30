@@ -11,9 +11,10 @@ export const profileService = {
   },
 
   update: async (userId: string, updates: Partial<Profile>) => {
-    const { data } = await httpService.put<Profile>(
+    const res = await httpService.put<Profile | Profile[]>(
       `${API_URLS.PROFILES}?id=eq.${userId}`, updates,
     );
-    return data;
+    if (Array.isArray(res.data)) return res.data[0];
+    return res.data ?? ({} as Profile);
   },
 };

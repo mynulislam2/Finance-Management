@@ -18,15 +18,17 @@ export const incomeService = {
   },
 
   create: async (income: Omit<Income, 'id' | 'created_at'>) => {
-    const { data } = await httpService.post<Income>(API_URLS.INCOMES, income);
-    return data;
+    const res = await httpService.post<Income | Income[]>(API_URLS.INCOMES, income);
+    if (Array.isArray(res.data)) return res.data[0];
+    return res.data ?? ({} as Income);
   },
 
   update: async (id: string, updates: Partial<Income>) => {
-    const { data } = await httpService.put<Income>(
+    const res = await httpService.put<Income | Income[]>(
       `${API_URLS.INCOMES}?id=eq.${id}`, updates,
     );
-    return data;
+    if (Array.isArray(res.data)) return res.data[0];
+    return res.data ?? ({} as Income);
   },
 
   delete: async (id: string) => {

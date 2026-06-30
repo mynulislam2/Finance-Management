@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { Colors } from '../../constants/colors';
+import { BorderRadius } from '../../constants/spacing';
 import { registerLoader } from '../../utils/loader';
 
 const LoadingOverlay = () => {
@@ -9,18 +10,10 @@ const LoadingOverlay = () => {
   useEffect(() => {
     registerLoader({
       show: () => {
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }).start();
+        Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
       },
       hide: () => {
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }).start();
+        Animated.timing(opacity, { toValue: 0, duration: 200, useNativeDriver: true }).start();
       },
     });
   }, [opacity]);
@@ -46,17 +39,17 @@ const styles = StyleSheet.create({
   loader: {
     width: 48,
     height: 48,
-    borderRadius: 24,
-    backgroundColor: Colors.white,
+    borderRadius: BorderRadius.full,
+    backgroundColor: Colors.surfaceContainerLowest,
     justifyContent: 'center',
     alignItems: 'center',
   },
   spinner: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: BorderRadius.full,
     borderWidth: 3,
-    borderColor: Colors.border,
+    borderColor: Colors.outlineVariant,
     borderTopColor: Colors.primary,
   },
 });

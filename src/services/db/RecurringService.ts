@@ -4,25 +4,34 @@ import { RecurringPayment } from '../../types';
 import { addDays, addWeeks, addMonths, addYears } from 'date-fns';
 
 export const recurringService = {
+  getById: async (id: string, userId: string) => {
+    const { data } = await httpService.get<RecurringPayment[]>(
+      `${API_URLS.RECURRING_PAYMENTS}?id=eq.${id}&user_id=eq.${userId}`,
+    );
+    return data?.[0] ?? null;
+  },
+
   getAll: async (userId: string) => {
     const { data } = await httpService.get<RecurringPayment[]>(
-      `${API_URLS.RECURRING_PAYMENTS}?user_id=eq.${userId}&is_paused=eq.false`,
+      `${API_URLS.RECURRING_PAYMENTS}?user_id=eq.${userId}&order=next_date.asc`,
     );
     return data ?? [];
   },
 
   create: async (payment: Omit<RecurringPayment, 'id' | 'created_at'>) => {
-    const { data } = await httpService.post<RecurringPayment>(
+    const res = await httpService.post<RecurringPayment | RecurringPayment[]>(
       API_URLS.RECURRING_PAYMENTS, payment,
     );
-    return data;
+    if (Array.isArray(res.data)) return res.data[0];
+    return res.data ?? ({} as RecurringPayment);
   },
 
   update: async (id: string, updates: Partial<RecurringPayment>) => {
-    const { data } = await httpService.put<RecurringPayment>(
+    const res = await httpService.put<RecurringPayment | RecurringPayment[]>(
       `${API_URLS.RECURRING_PAYMENTS}?id=eq.${id}`, updates,
     );
-    return data;
+    if (Array.isArray(res.data)) return res.data[0];
+    return res.data ?? ({} as RecurringPayment);
   },
 
   delete: async (id: string) => {

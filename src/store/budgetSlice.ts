@@ -19,7 +19,7 @@ const budgetSlice = createSlice({
       state.items = action.payload;
     },
     addBudget(state, action: PayloadAction<Budget>) {
-      state.items.push(action.payload);
+      state.items.unshift(action.payload);
     },
     updateBudget(state, action: PayloadAction<Budget>) {
       const idx = state.items.findIndex(b => b.id === action.payload.id);

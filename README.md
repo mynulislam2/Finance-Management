@@ -1,12 +1,28 @@
 # FinTrack — Personal Finance Management App
 
-[![CI/CD](https://github.com/mynulislam2/Finance_Management/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mynulislam2/Finance_Management/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-mynulislam2-blue?logo=github)](https://github.com/mynulislam2/Finance-Management)
+[![Download APK](https://img.shields.io/badge/Download-APK-34D058?logo=android)](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml)
 
-A cross-platform mobile application built with **React Native CLI (TypeScript)** and **Supabase** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
+A cross-platform mobile application built with **React Native CLI (TypeScript)** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
+
+## Screenshots
+
+|             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
+| :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :---------------------------------------------------: |
+| ![Dashboard](screenshots/ss/Home.png) | ![Expenses](screenshots/ss/expenses.png) | ![Income](screenshots/ss/incomes.png) | ![Analytics](screenshots/ss/analytics-allocation.png) |
+
+|              📋 Budgets               |                     🧾 Transactions                     |               👤 Profile               |               📈 Reports               |
+| :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
+| ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
+
+|                   📈 Trend                   |                    📊 Compare                    |                  ➕ Add Expense                  |                 ➕ Add Income                  |
+| :------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
+| ![Trend](screenshots/ss/analytics-trend.png) | ![Compare](screenshots/ss/analytics-compare.png) | ![Add Expense](screenshots/ss/add%20expense.png) | ![Add Income](screenshots/ss/add%20income.png) |
 
 ## Tech Stack
 
-- **Frontend**: React Native CLI + TypeScript, React Navigation v6, Redux Toolkit, Victory Native (charts)
+- **Frontend**: React Native CLI + TypeScript, React Navigation v7, Redux Toolkit, Victory Native (charts)
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
 - **Networking**: Axios (HttpService singleton with interceptors)
 - **Key Libraries**: date-fns, React Native Vector Icons
@@ -21,7 +37,8 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 - **Budget Management** — Per-category monthly limits with real-time spending progress
 - **Analytics** — Category pie chart, monthly trend bar chart, income vs expense comparison
 - **Reports** — Monthly/yearly summaries with savings and top category insights
-- **Profile** — Editable user profile with currency preference
+- **SMS Auto-Import** — Automatically detects bank SMS (debit/credit/UPI) and creates expense/income entries with hash-based deduplication
+- **Profile** — Editable user profile with currency preference, SMS import toggle
 
 ## Architecture
 
@@ -36,7 +53,6 @@ Screen → Hook → Service → HttpService → Supabase REST API
 - **`services/http/HttpService.ts`** — Singleton axios wrapper with auth interceptors, error handling, and token injection
 - **`services/auth/`**, **`services/db/`**, **`services/profile/`** — Business logic services that use HttpService internally
 - **Redux Toolkit** manages client-side state across all modules
-- **Supabase RLS** ensures users can only access their own data
 
 ## Project Structure
 
@@ -93,7 +109,6 @@ npx react-native run-android
 cd ios && pod install && cd ..
 npx react-native run-ios
 ```
-
 ## CI/CD
 
 On every push to `main`, the pipeline runs **typecheck**, **lint**, **tests**, and builds a **release APK** — available as a downloadable artifact from the Actions tab.
