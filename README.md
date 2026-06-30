@@ -1,12 +1,14 @@
 # FinTrack — Personal Finance Management App
 
-[![CI/CD](https://github.com/mynulislam2/Finance_Management/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mynulislam2/Finance_Management/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-mynulislam2-blue?logo=github)](https://github.com/mynulislam2/Finance-Management)
+[![Download APK](https://img.shields.io/badge/Download-APK-34D058?logo=android)](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml)
 
 A cross-platform mobile application built with **React Native CLI (TypeScript)** and **Supabase** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
 
 ## Tech Stack
 
-- **Frontend**: React Native CLI + TypeScript, React Navigation v6, Redux Toolkit, Victory Native (charts)
+- **Frontend**: React Native CLI + TypeScript, React Navigation v7, Redux Toolkit, Victory Native (charts)
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
 - **Networking**: Axios (HttpService singleton with interceptors)
 - **Key Libraries**: date-fns, React Native Vector Icons
@@ -21,7 +23,8 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 - **Budget Management** — Per-category monthly limits with real-time spending progress
 - **Analytics** — Category pie chart, monthly trend bar chart, income vs expense comparison
 - **Reports** — Monthly/yearly summaries with savings and top category insights
-- **Profile** — Editable user profile with currency preference
+- **SMS Auto-Import** — Automatically detects bank SMS (debit/credit/UPI) and creates expense/income entries with hash-based deduplication
+- **Profile** — Editable user profile with currency preference, SMS import toggle
 
 ## Architecture
 
@@ -59,6 +62,16 @@ src/
 ├── types/            # TypeScript interfaces
 └── lib/              # Supabase client initialization
 ```
+
+## Screenshots
+
+|             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
+| :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :---------------------------------------------------: |
+| ![Dashboard](screenshots/ss/Home.png) | ![Expenses](screenshots/ss/expenses.png) | ![Income](screenshots/ss/incomes.png) | ![Analytics](screenshots/ss/analytics-allocation.png) |
+
+|              📋 Budgets               |                     🧾 Transactions                     |               👤 Profile               |               📈 Reports               |
+| :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
+| ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
 ## Getting Started
 
