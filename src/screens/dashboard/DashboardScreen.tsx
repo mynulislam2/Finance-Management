@@ -1,5 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Animated,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -50,45 +59,59 @@ const DashboardScreen = () => {
     return 'Good evening';
   };
 
-  const loadData = useCallback(async (isRefresh = false) => {
-    if (!user) return;
-    if (!isRefresh && expenses.length === 0) setLoading(true);
-    const now = new Date();
-    const monthStart = startOfMonth(now).toISOString().split('T')[0];
-    const monthEnd = endOfMonth(now).toISOString().split('T')[0];
+  const loadData = useCallback(
+    async (isRefresh = false) => {
+      if (!user) return;
+      if (!isRefresh && expenses.length === 0) setLoading(true);
+      const now = new Date();
+      const monthStart = startOfMonth(now).toISOString().split('T')[0];
+      const monthEnd = endOfMonth(now).toISOString().split('T')[0];
 
-    const [allExpenses, allIncomes, userBudgets] = await Promise.all([
-      expenseService.getAll(user.id),
-      incomeService.getAll(user.id),
-      budgetService.getAll(user.id),
-    ]);
+      const [allExpenses, allIncomes, userBudgets] = await Promise.all([
+        expenseService.getAll(user.id),
+        incomeService.getAll(user.id),
+        budgetService.getAll(user.id),
+      ]);
 
-    setExpenses(allExpenses);
+      setExpenses(allExpenses);
 
-    const monthExpenses = allExpenses.filter(
-      (e: Expense) => e.date >= monthStart && e.date <= monthEnd,
-    );
-    const monthIncomes = allIncomes.filter(
-      (i: Income) => i.date >= monthStart && i.date <= monthEnd,
-    );
+      const monthExpenses = allExpenses.filter(
+        (e: Expense) => e.date >= monthStart && e.date <= monthEnd,
+      );
+      const monthIncomes = allIncomes.filter(
+        (i: Income) => i.date >= monthStart && i.date <= monthEnd,
+      );
 
-    setTotalExpense(monthExpenses.reduce((s: number, e: Expense) => s + e.amount, 0));
-    setTotalIncome(monthIncomes.reduce((s: number, i: Income) => s + i.amount, 0));
+      setTotalExpense(monthExpenses.reduce((s: number, e: Expense) => s + e.amount, 0));
+      setTotalIncome(monthIncomes.reduce((s: number, i: Income) => s + i.amount, 0));
 
-    const allTransactions: TransactionItem[] = [
-      ...allExpenses.map((e: Expense) => ({ ...e, type: 'expense' as const, title: e.title })),
-      ...allIncomes.map((i: Income) => ({ ...i, type: 'income' as const, title: i.source, category: i.source })),
-    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+      const allTransactions: TransactionItem[] = [
+        ...allExpenses.map((e: Expense) => ({ ...e, type: 'expense' as const, title: e.title })),
+        ...allIncomes.map((i: Income) => ({
+          ...i,
+          type: 'income' as const,
+          title: i.source,
+          category: i.source,
+        })),
+      ]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 5);
 
-    setRecentTransactions(allTransactions);
-    setBudgets(userBudgets);
-    setLoading(false);
-    setRefreshing(false);
+      setRecentTransactions(allTransactions);
+      setBudgets(userBudgets);
+      setLoading(false);
+      setRefreshing(false);
 
-    Animated.timing(fadeAnim, { toValue: 1, duration: 400, useNativeDriver: true }).start();
-  }, [user, fadeAnim]);
+      Animated.timing(fadeAnim, { toValue: 1, duration: 400, useNativeDriver: true }).start();
+    },
+    [user, fadeAnim, expenses.length],
+  );
 
-  useFocusEffect(useCallback(() => { loadData(); }, [loadData]));
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [loadData]),
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -99,7 +122,9 @@ const DashboardScreen = () => {
   const topCategory = useMemo(() => {
     if (expenses.length === 0) return '—';
     const cats: Record<string, number> = {};
-    expenses.forEach(e => { cats[e.category] = (cats[e.category] || 0) + e.amount; });
+    expenses.forEach(e => {
+      cats[e.category] = (cats[e.category] || 0) + e.amount;
+    });
     return Object.entries(cats).sort(([, a], [, b]) => b - a)[0][0];
   }, [expenses]);
   const greeting = getGreeting();
@@ -122,7 +147,14 @@ const DashboardScreen = () => {
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}>
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={Colors.primary}
+          />
+        }
+      >
         {/* Header */}
         <View style={styles.header}>
           <View>
@@ -141,7 +173,8 @@ const DashboardScreen = () => {
           <View style={styles.welcomeCard}>
             <Text style={styles.welcomeTitle}>Welcome to FinTrack! 👋</Text>
             <Text style={styles.welcomeText}>
-              Start by adding your first income or expense, then create a budget to track your spending.
+              Start by adding your first income or expense, then create a budget to track your
+              spending.
             </Text>
           </View>
         )}
@@ -158,29 +191,49 @@ const DashboardScreen = () => {
         {/* Summary Cards Row */}
         <View style={styles.summaryRow}>
           <View style={styles.summaryCard}>
-            <View style={[styles.summaryIcon, { backgroundColor: Colors.secondaryContainer + '20' }]}>
+            <View
+              style={[styles.summaryIcon, { backgroundColor: Colors.secondaryContainer + '20' }]}
+            >
               <Icon name="trending-down" size={20} color={Colors.secondary} />
             </View>
             <Text style={styles.summaryLabel}>Income</Text>
-            <Text style={[styles.summaryAmount, { color: Colors.secondary }]}>{formatCurrency(totalIncome)}</Text>
+            <Text style={[styles.summaryAmount, { color: Colors.secondary }]}>
+              {formatCurrency(totalIncome)}
+            </Text>
           </View>
           <View style={styles.summaryCard}>
             <View style={[styles.summaryIcon, { backgroundColor: Colors.errorContainer + '40' }]}>
               <Icon name="trending-up" size={20} color={Colors.tertiary} />
             </View>
             <Text style={styles.summaryLabel}>Expense</Text>
-            <Text style={[styles.summaryAmount, { color: Colors.tertiary }]}>{formatCurrency(totalExpense)}</Text>
+            <Text style={[styles.summaryAmount, { color: Colors.tertiary }]}>
+              {formatCurrency(totalExpense)}
+            </Text>
           </View>
         </View>
 
         {/* Second Row: Savings & Top Category */}
         <View style={styles.summaryRow}>
           <View style={styles.summaryCard}>
-            <View style={[styles.summaryIcon, { backgroundColor: (balance >= 0 ? Colors.secondary : Colors.warning) + '15' }]}>
-              <Icon name="wallet" size={20} color={balance >= 0 ? Colors.secondary : Colors.warning} />
+            <View
+              style={[
+                styles.summaryIcon,
+                { backgroundColor: (balance >= 0 ? Colors.secondary : Colors.warning) + '15' },
+              ]}
+            >
+              <Icon
+                name="wallet"
+                size={20}
+                color={balance >= 0 ? Colors.secondary : Colors.warning}
+              />
             </View>
             <Text style={styles.summaryLabel}>Savings</Text>
-            <Text style={[styles.summaryAmount, { color: balance >= 0 ? Colors.secondary : Colors.warning }]}>
+            <Text
+              style={[
+                styles.summaryAmount,
+                { color: balance >= 0 ? Colors.secondary : Colors.warning },
+              ]}
+            >
               {formatCurrency(Math.abs(balance))}
             </Text>
             <Text style={styles.summarySub}>{balance >= 0 ? 'Positive' : 'Negative'}</Text>
@@ -190,7 +243,9 @@ const DashboardScreen = () => {
               <Icon name="trophy" size={20} color={Colors.primary} />
             </View>
             <Text style={styles.summaryLabel}>Top Category</Text>
-            <Text style={[styles.summaryAmount, { color: Colors.onSurface, fontSize: 18 }]}>{topCategory}</Text>
+            <Text style={[styles.summaryAmount, { color: Colors.onSurface, fontSize: 18 }]}>
+              {topCategory}
+            </Text>
           </View>
         </View>
 
@@ -210,21 +265,45 @@ const DashboardScreen = () => {
                     end={{ x: 0, y: 1 }}
                     style={styles.budgetCard}
                   >
-                    <View style={[styles.budgetAccent1, { backgroundColor: (overBudget ? Colors.tertiary : Colors.primary) + '08' }]} />
+                    <View
+                      style={[
+                        styles.budgetAccent1,
+                        { backgroundColor: (overBudget ? Colors.tertiary : Colors.primary) + '08' },
+                      ]}
+                    />
                     <Text style={styles.budgetCardCategory}>{b.category}</Text>
                     <View style={styles.budgetProgressBg}>
-                      <View style={[styles.budgetProgressFill, { width: `${Math.min(percent, 100)}%`, backgroundColor: overBudget ? Colors.tertiary : Colors.primary }]} />
+                      <View
+                        style={[
+                          styles.budgetProgressFill,
+                          {
+                            width: `${Math.min(percent, 100)}%`,
+                            backgroundColor: overBudget ? Colors.tertiary : Colors.primary,
+                          },
+                        ]}
+                      />
                     </View>
                     <View style={styles.budgetCardRow}>
                       <Text style={styles.budgetCardSpent}>
-                        {formatCurrency(spent)}<Text style={styles.budgetCardOf}> of {formatCurrency(b.limit_amount)}</Text>
+                        {formatCurrency(spent)}
+                        <Text style={styles.budgetCardOf}>
+                          {' '}
+                          of {formatCurrency(b.limit_amount)}
+                        </Text>
                       </Text>
-                      <Text style={[styles.budgetBadgePct, { color: overBudget ? Colors.tertiary : Colors.primary }]}>
+                      <Text
+                        style={[
+                          styles.budgetBadgePct,
+                          { color: overBudget ? Colors.tertiary : Colors.primary },
+                        ]}
+                      >
                         {Math.round(percent)}%
                       </Text>
                     </View>
                     <Text style={styles.budgetCardRemaining}>
-                      {overBudget ? 'Over budget!' : `${formatCurrency(b.limit_amount - spent)} left`}
+                      {overBudget
+                        ? 'Over budget!'
+                        : `${formatCurrency(b.limit_amount - spent)} left`}
                     </Text>
                   </LinearGradient>
                 );
@@ -266,8 +345,20 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: Colors.background },
   scroll: { paddingBottom: 120 },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background },
-  loadingOverlay: { position: 'absolute', top: 200, left: 0, right: 0, alignItems: 'center', zIndex: 10 },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.background,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 200,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 10,
+  },
 
   // Header
   header: {
@@ -278,22 +369,59 @@ const styles = StyleSheet.create({
     paddingTop: 56,
     paddingBottom: Spacing.md,
   },
-  greeting: { fontSize: 14, fontFamily: Fonts.family.regular, color: Colors.onSurfaceVariant, marginBottom: 2 },
+  greeting: {
+    fontSize: 14,
+    fontFamily: Fonts.family.regular,
+    color: Colors.onSurfaceVariant,
+    marginBottom: 2,
+  },
   appName: { fontSize: 20, fontFamily: Fonts.family.bold, color: Colors.primary },
-  avatar: { width: 40, height: 40, borderRadius: BorderRadius.full, backgroundColor: Colors.primaryContainer, justifyContent: 'center', alignItems: 'center' },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.full,
+    backgroundColor: Colors.primaryContainer,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   avatarText: { fontSize: 14, fontFamily: Fonts.family.bold, color: Colors.onPrimaryContainer },
 
   // Welcome
   welcomeCard: {
-    marginHorizontal: Spacing.containerMargin, marginBottom: Spacing.md,
-    backgroundColor: Colors.primaryContainer, borderRadius: BorderRadius.xl,
+    marginHorizontal: Spacing.containerMargin,
+    marginBottom: Spacing.md,
+    backgroundColor: Colors.primaryContainer,
+    borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
   },
-  welcomeTitle: { fontSize: 18, fontFamily: Fonts.family.bold, color: Colors.onPrimaryContainer, marginBottom: Spacing.sm },
-  welcomeText: { fontSize: 14, fontFamily: Fonts.family.regular, color: Colors.onPrimaryContainer, opacity: 0.8, lineHeight: 20, marginBottom: Spacing.md },
+  welcomeTitle: {
+    fontSize: 18,
+    fontFamily: Fonts.family.bold,
+    color: Colors.onPrimaryContainer,
+    marginBottom: Spacing.sm,
+  },
+  welcomeText: {
+    fontSize: 14,
+    fontFamily: Fonts.family.regular,
+    color: Colors.onPrimaryContainer,
+    opacity: 0.8,
+    lineHeight: 20,
+    marginBottom: Spacing.md,
+  },
   welcomeActions: { flexDirection: 'row' },
-  welcomeBtn: { paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm, backgroundColor: Colors.onPrimaryContainer + '20', borderRadius: BorderRadius.lg },
-  welcomeBtnText: { fontSize: 13, fontFamily: Fonts.family.semiBold, color: Colors.onPrimaryContainer, textTransform: 'uppercase', letterSpacing: 0.05 },
+  welcomeBtn: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.onPrimaryContainer + '20',
+    borderRadius: BorderRadius.lg,
+  },
+  welcomeBtnText: {
+    fontSize: 13,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.onPrimaryContainer,
+    textTransform: 'uppercase',
+    letterSpacing: 0.05,
+  },
 
   // Balance Card
   balanceCard: {
@@ -323,54 +451,162 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: Colors.onPrimary + '08',
   },
-  balanceLabel: { fontSize: 12, fontFamily: Fonts.family.semiBold, color: Colors.onPrimary + '80', textTransform: 'uppercase', letterSpacing: 0.15, marginBottom: Spacing.xs },
-  balanceAmount: { fontSize: 40, fontFamily: Fonts.family.bold, letterSpacing: -0.03, marginBottom: Spacing.md },
+  balanceLabel: {
+    fontSize: 12,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.onPrimary + '80',
+    textTransform: 'uppercase',
+    letterSpacing: 0.15,
+    marginBottom: Spacing.xs,
+  },
+  balanceAmount: {
+    fontSize: 40,
+    fontFamily: Fonts.family.bold,
+    letterSpacing: -0.03,
+    marginBottom: Spacing.md,
+  },
   balanceActions: { flexDirection: 'row', gap: Spacing.sm, width: '100%' },
-  balanceAction: { flex: 1, backgroundColor: Colors.onPrimary + '20', paddingVertical: Spacing.md, borderRadius: BorderRadius.lg, alignItems: 'center' },
-  balanceActionText: { fontSize: 12, fontFamily: Fonts.family.semiBold, color: Colors.onPrimary, textTransform: 'uppercase', letterSpacing: 0.1 },
-  balanceActionSecondary: { flex: 1, backgroundColor: Colors.primaryContainer, paddingVertical: Spacing.md, borderRadius: BorderRadius.lg, alignItems: 'center' },
-  balanceActionSecondaryText: { fontSize: 12, fontFamily: Fonts.family.semiBold, color: Colors.onPrimaryContainer, textTransform: 'uppercase', letterSpacing: 0.1 },
+  balanceAction: {
+    flex: 1,
+    backgroundColor: Colors.onPrimary + '20',
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+  },
+  balanceActionText: {
+    fontSize: 12,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.onPrimary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.1,
+  },
+  balanceActionSecondary: {
+    flex: 1,
+    backgroundColor: Colors.primaryContainer,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+  },
+  balanceActionSecondaryText: {
+    fontSize: 12,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.onPrimaryContainer,
+    textTransform: 'uppercase',
+    letterSpacing: 0.1,
+  },
 
   // Summary
-  summaryRow: { flexDirection: 'row', gap: Spacing.sm, paddingHorizontal: Spacing.containerMargin, marginBottom: Spacing.lg },
+  summaryRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.containerMargin,
+    marginBottom: Spacing.lg,
+  },
   summaryCard: {
-    flex: 1, backgroundColor: Colors.surfaceContainerLow, borderRadius: BorderRadius.xxl,
+    flex: 1,
+    backgroundColor: Colors.surfaceContainerLow,
+    borderRadius: BorderRadius.xxl,
     padding: Spacing.lg,
   },
-  summaryIcon: { width: 40, height: 40, borderRadius: BorderRadius.sm, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.md },
+  summaryIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
   summaryIconText: { fontSize: 20, fontFamily: Fonts.family.bold },
-  summaryLabel: { fontSize: 11, fontFamily: Fonts.family.medium, color: Colors.outline, textTransform: 'uppercase', letterSpacing: 0.05, marginBottom: 2 },
+  summaryLabel: {
+    fontSize: 11,
+    fontFamily: Fonts.family.medium,
+    color: Colors.outline,
+    textTransform: 'uppercase',
+    letterSpacing: 0.05,
+    marginBottom: 2,
+  },
   summaryAmount: { fontSize: 22, fontFamily: Fonts.family.bold },
-  summarySub: { fontSize: 11, fontFamily: Fonts.family.regular, color: Colors.outline, marginTop: 2 },
+  summarySub: {
+    fontSize: 11,
+    fontFamily: Fonts.family.regular,
+    color: Colors.outline,
+    marginTop: 2,
+  },
 
   // Section
   section: { paddingHorizontal: Spacing.containerMargin, marginBottom: Spacing.lg },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
   sectionTitle: { fontSize: 16, fontFamily: Fonts.family.semiBold, color: Colors.onSurface },
   sectionAction: { fontSize: 20, color: Colors.outline },
 
   // Budget
   budgetCard: {
-    flex: 1, backgroundColor: Colors.surface, borderRadius: BorderRadius.xl,
-    padding: Spacing.lg, overflow: 'hidden',
+    flex: 1,
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.xl,
+    padding: Spacing.lg,
+    overflow: 'hidden',
   },
   budgetAccent1: {
-    position: 'absolute', top: -20, right: -15,
-    width: 100, height: 100, borderRadius: 50,
+    position: 'absolute',
+    top: -20,
+    right: -15,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
-  budgetCardCategory: { fontSize: 12, fontFamily: Fonts.family.semiBold, color: Colors.outline, textTransform: 'uppercase', letterSpacing: 0.05, marginBottom: Spacing.sm },
-  budgetProgressBg: { height: 8, backgroundColor: Colors.surfaceContainerHigh, borderRadius: 4, overflow: 'hidden', marginBottom: Spacing.sm },
+  budgetCardCategory: {
+    fontSize: 12,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.outline,
+    textTransform: 'uppercase',
+    letterSpacing: 0.05,
+    marginBottom: Spacing.sm,
+  },
+  budgetProgressBg: {
+    height: 8,
+    backgroundColor: Colors.surfaceContainerHigh,
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: Spacing.sm,
+  },
   budgetProgressFill: { height: 8, borderRadius: 4 },
-  budgetCardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 2 },
+  budgetCardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 2,
+  },
   budgetCardSpent: { fontSize: 20, fontFamily: Fonts.family.bold, color: Colors.onSurface },
   budgetCardOf: { fontSize: 13, fontFamily: Fonts.family.regular, color: Colors.onSurfaceVariant },
   budgetBadgePct: { fontSize: 13, fontFamily: Fonts.family.semiBold },
-  budgetCardRemaining: { fontSize: 11, fontFamily: Fonts.family.regular, color: Colors.onSurfaceVariant },
+  budgetCardRemaining: {
+    fontSize: 11,
+    fontFamily: Fonts.family.regular,
+    color: Colors.onSurfaceVariant,
+  },
 
   // Transactions
   transactionList: { borderRadius: BorderRadius.lg },
-  viewAll: { fontSize: 13, fontFamily: Fonts.family.semiBold, color: Colors.primary, textTransform: 'uppercase', letterSpacing: 0.05 },
-  empty: { fontSize: 14, fontFamily: Fonts.family.regular, color: Colors.outline, textAlign: 'center', paddingVertical: Spacing.xl * 2 },
+  viewAll: {
+    fontSize: 13,
+    fontFamily: Fonts.family.semiBold,
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.05,
+  },
+  empty: {
+    fontSize: 14,
+    fontFamily: Fonts.family.regular,
+    color: Colors.outline,
+    textAlign: 'center',
+    paddingVertical: Spacing.xl * 2,
+  },
 });
 
 export default DashboardScreen;

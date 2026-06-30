@@ -17,8 +17,7 @@ import { RootState } from '../../store';
 import { useAuth } from '../../hooks/useAuth';
 import { handleError } from '../../utils/errorHandler';
 import { budgetService } from '../../services/db/BudgetService';
-import { Expense, Income, Budget } from '../../types';
-import { formatCurrency } from '../../utils';
+import { Budget } from '../../types';
 
 type Nav = NativeStackNavigationProp<FinanceStackParamList, 'FinanceHome'>;
 
@@ -30,7 +29,16 @@ const SEGMENTS: { key: SegmentType; label: string }[] = [
   { key: 'budgets', label: 'Budgets' },
 ];
 
-const CATEGORIES = ['All', 'Food', 'Transport', 'Shopping', 'Bills', 'Health', 'Entertainment', 'Other'];
+const CATEGORIES = [
+  'All',
+  'Food',
+  'Transport',
+  'Shopping',
+  'Bills',
+  'Health',
+  'Entertainment',
+  'Other',
+];
 
 const ExpenseListScreen = () => {
   const nav = useNavigation<Nav>();
@@ -70,7 +78,11 @@ const ExpenseListScreen = () => {
     }
   }, [user, dispatch]);
 
-  useFocusEffect(useCallback(() => { fetchAll(); }, [fetchAll]));
+  useFocusEffect(
+    useCallback(() => {
+      fetchAll();
+    }, [fetchAll]),
+  );
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -91,7 +103,8 @@ const ExpenseListScreen = () => {
   };
 
   const handleAdd = () => {
-    const screen = segment === 'expenses' ? 'AddExpense' : segment === 'income' ? 'AddIncome' : 'CreateBudget';
+    const screen =
+      segment === 'expenses' ? 'AddExpense' : segment === 'income' ? 'AddIncome' : 'CreateBudget';
     nav.navigate(screen as any);
   };
 
@@ -108,7 +121,12 @@ const ExpenseListScreen = () => {
     return data;
   }, [incomes, search]);
 
-  const isLoading = segment === 'expenses' ? expensesLoading : segment === 'income' ? incomesLoading : budgetsLoading;
+  const isLoading =
+    segment === 'expenses'
+      ? expensesLoading
+      : segment === 'income'
+      ? incomesLoading
+      : budgetsLoading;
 
   const renderSegmentContent = () => {
     if (segment === 'expenses') {
@@ -185,7 +203,7 @@ const ExpenseListScreen = () => {
       {/* Segmented Control */}
       <View style={styles.segmentContainer}>
         <View style={styles.segmentBg}>
-          {SEGMENTS.map((s, idx) => (
+          {SEGMENTS.map((s, _idx) => (
             <Pressable
               key={s.key}
               onPress={() => switchSegment(s.key)}
@@ -220,7 +238,9 @@ const ExpenseListScreen = () => {
               onPress={() => setCategoryFilter(c)}
               style={[styles.filterChip, categoryFilter === c && styles.filterChipActive]}
             >
-              <Text style={[styles.filterChipText, categoryFilter === c && styles.filterChipTextActive]}>
+              <Text
+                style={[styles.filterChipText, categoryFilter === c && styles.filterChipTextActive]}
+              >
                 {c}
               </Text>
             </Pressable>
@@ -229,9 +249,7 @@ const ExpenseListScreen = () => {
       )}
 
       {/* List */}
-      <View style={styles.listContainer}>
-        {renderSegmentContent()}
-      </View>
+      <View style={styles.listContainer}>{renderSegmentContent()}</View>
     </View>
   );
 };
