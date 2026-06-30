@@ -73,6 +73,10 @@ src/
 | :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
 | ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
+|                   📈 Trend                   |                    📊 Compare                    |                  ➕ Add Expense                  |                 ➕ Add Income                  |
+| :------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
+| ![Trend](screenshots/ss/analytics-trend.png) | ![Compare](screenshots/ss/analytics-compare.png) | ![Add Expense](screenshots/ss/add%20expense.png) | ![Add Income](screenshots/ss/add%20income.png) |
+
 ## Getting Started
 
 ### Prerequisites
