@@ -4,7 +4,18 @@
 [![GitHub](https://img.shields.io/badge/GitHub-mynulislam2-blue?logo=github)](https://github.com/mynulislam2/Finance-Management)
 [![Download APK](https://img.shields.io/badge/Download-APK-34D058?logo=android)](https://github.com/mynulislam2/Finance-Management/actions/workflows/ci-cd.yml)
 
-A cross-platform mobile application built with **React Native CLI (TypeScript)** and **Supabase** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
+A cross-platform mobile application built with **React Native CLI (TypeScript)** that helps users track expenses, manage income, handle recurring payments, set budgets, and gain financial insights through interactive charts and reports.
+
+## Screenshots
+
+|             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
+| :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :---------------------------------------------------: |
+| ![Dashboard](screenshots/ss/Home.png) | ![Expenses](screenshots/ss/expenses.png) | ![Income](screenshots/ss/incomes.png) | ![Analytics](screenshots/ss/analytics-allocation.png) |
+
+|              📋 Budgets               |                     🧾 Transactions                     |               👤 Profile               |               📈 Reports               |
+| :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
+| ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
+
 
 ## Tech Stack
 
@@ -12,7 +23,7 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
 - **Networking**: Axios (HttpService singleton with interceptors)
 - **Key Libraries**: date-fns, React Native Vector Icons
-
+  
 ## Features
 
 - **Auth** — Email/password sign-up, login, password reset with persisted sessions
@@ -39,7 +50,6 @@ Screen → Hook → Service → HttpService → Supabase REST API
 - **`services/http/HttpService.ts`** — Singleton axios wrapper with auth interceptors, error handling, and token injection
 - **`services/auth/`**, **`services/db/`**, **`services/profile/`** — Business logic services that use HttpService internally
 - **Redux Toolkit** manages client-side state across all modules
-- **Supabase RLS** ensures users can only access their own data
 
 ## Project Structure
 
@@ -63,15 +73,6 @@ src/
 └── lib/              # Supabase client initialization
 ```
 
-## Screenshots
-
-|             🏠 Dashboard              |               💳 Expenses                |               💵 Income               |                     📊 Analytics                      |
-| :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :---------------------------------------------------: |
-| ![Dashboard](screenshots/ss/Home.png) | ![Expenses](screenshots/ss/expenses.png) | ![Income](screenshots/ss/incomes.png) | ![Analytics](screenshots/ss/analytics-allocation.png) |
-
-|              📋 Budgets               |                     🧾 Transactions                     |               👤 Profile               |               📈 Reports               |
-| :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
-| ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
 |                   📈 Trend                   |                    📊 Compare                    |                  ➕ Add Expense                  |                 ➕ Add Income                  |
 | :------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
