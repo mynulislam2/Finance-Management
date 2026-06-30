@@ -16,6 +16,9 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 | :-----------------------------------: | :-----------------------------------------------------: | :------------------------------------: | :------------------------------------: |
 | ![Budget](screenshots/ss/budgets.png) | ![Transactions](screenshots/ss/All-%20Transactions.png) | ![Profile](screenshots/ss/profile.png) | ![Reports](screenshots/ss/reports.png) |
 
+|                   📈 Trend                   |                    📊 Compare                    |                  ➕ Add Expense                  |                 ➕ Add Income                  |
+| :------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
+| ![Trend](screenshots/ss/analytics-trend.png) | ![Compare](screenshots/ss/analytics-compare.png) | ![Add Expense](screenshots/ss/add%20expense.png) | ![Add Income](screenshots/ss/add%20income.png) |
 
 ## Tech Stack
 
@@ -23,7 +26,7 @@ A cross-platform mobile application built with **React Native CLI (TypeScript)**
 - **Backend**: Supabase (PostgreSQL + Row Level Security), Supabase Auth
 - **Networking**: Axios (HttpService singleton with interceptors)
 - **Key Libraries**: date-fns, React Native Vector Icons
-  
+
 ## Features
 
 - **Auth** — Email/password sign-up, login, password reset with persisted sessions
@@ -72,11 +75,6 @@ src/
 ├── types/            # TypeScript interfaces
 └── lib/              # Supabase client initialization
 ```
-
-
-|                   📈 Trend                   |                    📊 Compare                    |                  ➕ Add Expense                  |                 ➕ Add Income                  |
-| :------------------------------------------: | :----------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
-| ![Trend](screenshots/ss/analytics-trend.png) | ![Compare](screenshots/ss/analytics-compare.png) | ![Add Expense](screenshots/ss/add%20expense.png) | ![Add Income](screenshots/ss/add%20income.png) |
 
 ## Getting Started
 
